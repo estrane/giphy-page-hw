@@ -49,11 +49,13 @@
                 url: queryURL,
                 method: "GET"
             }).done(function (response) {
-
+                // Console log teh response to check giphy's API object
                 console.log(response);
 
+                // Set the basic use for the API early
                 var results = response.data;
 
+                // For loop to go through the 10 images and set them accodingly
                 for (var i = 0; i < results.length; i++) {
 
                     // Creating a div to hold the animals
@@ -65,16 +67,17 @@
                     // Creating and storing an image tag
                     var animalImage = $("<img>");
                     // Setting the src attribute of the image to a property pulled off the result item
-
                     animalImage.attr("src", results[i].images.fixed_height_still.url);
 
+                    // Set a data attr for the animated gif
                     animalImage.attr("data-animate", results[i].images.fixed_height.url);
 
+                    // Set a data attr for the still gif
                     animalImage.attr("data-still", results[i].images.fixed_height_still.url);
 
                     // Set a data attr for the state to pause and play the gifs
                     animalImage.attr("data-state", "still");
-                    
+
                     // Add an image class to the images to make them clickable
                     animalImage.addClass("image");
 
@@ -85,11 +88,12 @@
 
                     $("#animals-view").prepend(animalDiv);
                 }
-                // Scan dynamically for anything with an image class for a click function
+
 
             });
         }
 
+        // Scan dynamically for anything with an image class for a click function
         $(document).on("click", ".image", function () {
             // The attr jQuery method allows us to get or set the value of any attribute on our HTML element
             var state = $(this).attr("data-state");
@@ -134,16 +138,16 @@
             // This line grabs the input from the textbox
             var animal = $("#animal-input").val().trim();
 
-            // Adding movie from the textbox to our array
+            // Adding animal from the textbox to our array
             animalArray.push(animal);
 
-            // Calling renderButtons which handles the processing of our movie array
+            // Calling renderButtons which handles the processing of our animal array
             renderButtons();
         });
 
 
 
-        // Adding a click event listener to all elements with a class of "movie"
+        // Adding a click event listener to all elements with a class of "animal"
         $(document).on("click", ".animal-button", displayAnimalInfo);
 
 
