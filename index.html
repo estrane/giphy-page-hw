@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Giphy</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+        crossorigin="anonymous">
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>Animal gifs!</h1>
+
+        <!-- Rendered Buttons will get Dumped Here  -->
+        <div id="buttons-view"></div>
+
+        <form id="animal-form">
+            <label for="animal-input">Add an animal</label>
+            <input type="text" id="animal-input">
+
+            <!-- Button triggers new characters to be added -->
+            <input id="add-animal" type="submit" value="Add an animal">
+        </form>
+
+        <!-- Animal gifs will Get Dumped Dere -->
+        <div id="animals-view"></div>
+    </div>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript">
+        // Initial array of animals
+        var animalArray = ["dog", "cat", "bird", "hamster", "fish", "skunk", "bear", "lizard"];
+
+
+        function displayAnimalInfo() {
+            var animal = $(this).attr("data-name");
+            var queryURL = "https://api.giphy.com/v1/gifs/search?api_key=y0aMuOnqxVMw0bwY4VPtyj0TKdBBUVrC&q=" + animal + "&limit=10&offset=0&rating=G&lang=en"
+            $.ajax({
+                url: queryURL,
+                method: "GET"
+            }).done(function (response) {
+
+                console.log(response);
+
+                // Creating a div to hold the animals
+                var animalDiv = $("<div class='animals'>");
+
+                // // Storing the rating data
+                // var rating = response.Rated;
+
+                // // Creating an element to have the rating displayed
+                // var pOne = $("<p>").text("Rating: " + rating);
+
+                // // Displaying the rating
+                // animalDiv.append(pOne);
+
+                $("#animals-view").prepend(animalDiv);
+            });
+        }
+
+            function renderButtons() {
+
+                // Deleting the animals prior to adding new animals
+                // (this is necessary otherwise you will have repeat buttons)
+                $("#buttons-view").empty();
+
+                // Looping through the array of animals
+                for (var i = 0; i < animalArray.length; i++) {
+
+                    // Then dynamicaly generating buttons for each animal in the array
+                    // This code $("<button>") is all jQuery needs to create the beginning and end tag. (<button></button>)
+                    var a = $("<button>");
+                    // Adding a class of animal to our button
+                    a.addClass("animals");
+                    // Adding a data-attribute
+                    a.attr("data-name", animalArray[i]);
+                    // Providing the initial button text
+                    a.text(animalArray[i]);
+                    // Adding the button to the buttons-view div
+                    $("#buttons-view").append(a);
+                }
+            }
+
+            $("#add-animal").on("click", function (event) {
+                event.preventDefault();
+                // This line grabs the input from the textbox
+                var animal = $("#animal-input").val().trim();
+
+                // Adding movie from the textbox to our array
+                animalArray.push(animal);
+
+                // Calling renderButtons which handles the processing of our movie array
+                renderButtons();
+            });
+
+            // Adding a click event listener to all elements with a class of "movie"
+            $(document).on("click", ".animals", displayAnimalInfo);
+
+            // Calling the renderButtons function to display the intial buttons
+            renderButtons();
+        
+    </script>
+</body>
+
+</html>
